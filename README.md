@@ -1,1 +1,3 @@
-# Tictactoe-cpp
+#Learning C++ syntax
+* Basic tictactoe
+* buggy
