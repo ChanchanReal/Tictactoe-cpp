@@ -4,6 +4,8 @@
 #include <iostream>
 #include <conio.h>
 
+
+
 class Player {
 private:
     char playerInput;
@@ -25,14 +27,13 @@ enum WINNER_FLAG {
 };
 
 class Board {
-private:
-    char board[3][3];
-
 public:
+    char board[3][3];
     Board() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 board[i][j] = ' ';
+                ;
             }
         }
     }
@@ -82,6 +83,90 @@ public:
         }
         return static_cast<int>(isWinner);
     }
+    int AICheckWinner(char player) {
+        WINNER_FLAG isWinner = NONE;
+        for (int row = 0; row < 3; row++) {
+            if (board[row][0] == board[row][1] && board[row][0] == board[row][2] && board[row][0] == player) {
+                isWinner = WINNER_FLAG::WIN;
+            }
+        }
+        for (int col = 0; col < 3; col++) {
+            if (board[0][col] == board[1][col] && board[1][col] == board[2][col] && board[0][col] == player) {
+                isWinner = WINNER_FLAG::WIN;
+            }
+        }
+
+        if (board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] == player) {
+            isWinner = WINNER_FLAG::WIN;
+        }
+        if (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[0][2] == player) {
+            isWinner = WINNER_FLAG::WIN;
+        }
+        return static_cast<int>(isWinner);
+    }
+    int Minimax(int depth, bool isAI, char player) {
+        if (AICheckWinner('X') == 1) {
+            return 1;
+        }
+        if (AICheckWinner('O') == 1) {
+            return -1;
+        }
+        if (depth == 0) {
+            return 0;
+        }
+            if (isAI) {
+                int bestScore = -INFINITY;
+                for (int row = 0; row < 3; row++) {
+                    for (int col = 0; col < 3; col++) {
+                        if (board[row][col] == ' ') {
+                            board[row][col] = 'X';
+                            int score = Minimax(depth - 1, false, 'O');
+                            board[row][col] = ' ';
+                            if (score > bestScore) {
+                                bestScore = score;
+                            }
+                        }
+                    }
+                }
+                return bestScore;
+            }
+            else {
+                int bestScore = INFINITY;
+                for (int row = 0; row < 3; row++) {
+                    for (int col = 0; col < 3; col++) {
+                        if (board[row][col] == ' ') {
+                            board[row][col] = 'O';
+                            int score = Minimax(depth - 1, true, 'X');
+                            board[row][col] = ' ';
+                            if (score < bestScore) {
+                                bestScore = score;
+                            }
+                        }
+                    }
+                }
+                return bestScore;
+            }
+        
+    }
+    void Bestmove(int availableMove) {
+        int bestMove[2];
+        int bestScore = INT_MIN;
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 3; col++) {
+                if (board[row][col] == ' ') {
+                    board[row][col] = 'X';
+                    int score = Minimax(availableMove, false, 'O');
+                    board[row][col] = ' ';
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestMove[0] = row;
+                        bestMove[1] = col;
+                    }
+                }
+            }
+        }
+        board[bestMove[0]][bestMove[1]] = 'X';
+    }
 };
 
 class Tictactoe {
@@ -91,11 +176,7 @@ private:
     Player playerTwo;
     bool winner = false;
     bool currentPlayer = false;
-
-public:
-    Tictactoe() {
-        board = Board();
-    }
+    int playerTurns = 9;
 
 public:
     void Start() {
@@ -108,21 +189,19 @@ public:
         int input;
         while(!winner){
             std::cout << "Please pick where to put your input 0-8: ";
-            
-            while (!(std::cin >> input) && input >= 0 && input <= 8) {
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                board.DrawBoard();
-                std::cout << "Invalid input. Please enter an integer: ";
+            if (currentPlayer) {
+                board.Bestmove(playerTurns);
             }
-            
-            if (!currentPlayer) {
+            else{
+                while (!(std::cin >> input) && input >= 0 && input <= 8) {
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    board.DrawBoard();
+                    std::cout << "Invalid input. Please enter an integer: ";
+                }
                 board.Input(input, playerOne.GetPlayerInput());
             }
-            else {
-                board.Input(input, playerTwo.GetPlayerInput());
-            }
-           
+            playerTurns--;
             int checkValue = board.CheckWinner();
             system("CLS");
             board.DrawBoard();
