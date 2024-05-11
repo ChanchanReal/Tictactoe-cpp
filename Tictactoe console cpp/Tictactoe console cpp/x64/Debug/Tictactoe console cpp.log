@@ -1,4 +1,2 @@
 ﻿  Tictactoe console cpp.cpp
-C:\Users\cedie\source\repos\Tictactoe-cpp\Tictactoe console cpp\Tictactoe console cpp\Tictactoe console cpp.cpp(118,31): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\cedie\source\repos\Tictactoe-cpp\Tictactoe console cpp\Tictactoe console cpp\Tictactoe console cpp.cpp(134,31): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
   Tictactoe console cpp.vcxproj -> C:\Users\cedie\source\repos\Tictactoe-cpp\Tictactoe console cpp\x64\Debug\Tictactoe console cpp.exe

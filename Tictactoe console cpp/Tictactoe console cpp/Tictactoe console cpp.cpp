@@ -23,6 +23,7 @@ public:
 
 enum WINNER_FLAG {
     WIN = 1,
+    LOSE = -1,
     NONE = 0
 };
 
@@ -84,14 +85,14 @@ public:
         return static_cast<int>(isWinner);
     }
     int AICheckWinner(char player) {
-        WINNER_FLAG isWinner = NONE;
+        WINNER_FLAG isWinner = WINNER_FLAG::NONE;
         for (int row = 0; row < 3; row++) {
             if (board[row][0] == board[row][1] && board[row][0] == board[row][2] && board[row][0] == player) {
                 isWinner = WINNER_FLAG::WIN;
             }
         }
         for (int col = 0; col < 3; col++) {
-            if (board[0][col] == board[1][col] && board[1][col] == board[2][col] && board[0][col] == player) {
+            if (board[0][col] == board[1][col] && board[0][col] == board[2][col] && board[0][col] == player) {
                 isWinner = WINNER_FLAG::WIN;
             }
         }
@@ -104,43 +105,39 @@ public:
         }
         return static_cast<int>(isWinner);
     }
-    int Minimax(int depth, bool isAI, char player) {
+    int Minimax(int depth, bool isAI) {
         if (AICheckWinner('X') == 1) {
             return 1;
         }
         if (AICheckWinner('O') == 1) {
             return -1;
         }
-        if (depth == 0) {
+        if (depth < 0) {
             return 0;
         }
             if (isAI) {
-                int bestScore = -INFINITY;
+                int bestScore = INT_MIN;
                 for (int row = 0; row < 3; row++) {
                     for (int col = 0; col < 3; col++) {
                         if (board[row][col] == ' ') {
                             board[row][col] = 'X';
-                            int score = Minimax(depth - 1, false, 'O');
+                            int score = Minimax(depth - 1, false);
                             board[row][col] = ' ';
-                            if (score > bestScore) {
-                                bestScore = score;
-                            }
+                            bestScore = std::max(score, bestScore);
                         }
                     }
                 }
                 return bestScore;
             }
             else {
-                int bestScore = INFINITY;
+                int bestScore = INT_MAX;
                 for (int row = 0; row < 3; row++) {
                     for (int col = 0; col < 3; col++) {
                         if (board[row][col] == ' ') {
                             board[row][col] = 'O';
-                            int score = Minimax(depth - 1, true, 'X');
+                            int score = Minimax(depth - 1, true);
                             board[row][col] = ' ';
-                            if (score < bestScore) {
-                                bestScore = score;
-                            }
+                            bestScore = std::min(score, bestScore);
                         }
                     }
                 }
@@ -155,9 +152,9 @@ public:
             for (int col = 0; col < 3; col++) {
                 if (board[row][col] == ' ') {
                     board[row][col] = 'X';
-                    int score = Minimax(availableMove, false, 'O');
+                    int score = Minimax(availableMove, false);
                     board[row][col] = ' ';
-                    if (score > bestScore) {
+                    if (score >= bestScore) {
                         bestScore = score;
                         bestMove[0] = row;
                         bestMove[1] = col;
