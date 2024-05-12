@@ -59,57 +59,32 @@ public:
             std::cout << "|\n";
         }
     }
-    int CheckWinner() {
-        WINNER_FLAG isWinner = NONE;
-        for (int row = 0; row < 3; row++) {
-            if (board[row][0] == board[row][1] && board[row][0] == board[row][2] && board[row][0] == 'X'||
-                board[row][0] == board[row][1] && board[row][0] == board[row][2] && board[row][0] == 'O') {
-                isWinner = WINNER_FLAG::WIN;
-            }
-        }
-        for (int col = 0; col < 3; col++) {
-            if (board[0][col] == board[1][col] && board[1][col] == board[2][col] && board[0][col] == 'X'||
-                board[0][col] == board[1][col] && board[1][col] == board[2][col] && board[0][col] == 'O') {
-                isWinner = WINNER_FLAG::WIN;
-            }
-        }
-
-        if (board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] == 'X' ||
-            board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] == 'O') {
-            isWinner = WINNER_FLAG::WIN;
-        }
-        if (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[0][2] == 'X' ||
-            board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[0][2] == 'O') {
-            isWinner = WINNER_FLAG::WIN;
-        }
-        return static_cast<int>(isWinner);
-    }
-    int AICheckWinner(char player) {
+    int CheckWinner(char playerInput) {
         WINNER_FLAG isWinner = WINNER_FLAG::NONE;
         for (int row = 0; row < 3; row++) {
-            if (board[row][0] == board[row][1] && board[row][0] == board[row][2] && board[row][0] == player) {
+            if (board[row][0] == board[row][1] && board[row][0] == board[row][2] && board[row][0] == playerInput) {
                 isWinner = WINNER_FLAG::WIN;
             }
         }
         for (int col = 0; col < 3; col++) {
-            if (board[0][col] == board[1][col] && board[0][col] == board[2][col] && board[0][col] == player) {
+            if (board[0][col] == board[1][col] && board[0][col] == board[2][col] && board[0][col] == playerInput) {
                 isWinner = WINNER_FLAG::WIN;
             }
         }
 
-        if (board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] == player) {
+        if (board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] == playerInput) {
             isWinner = WINNER_FLAG::WIN;
         }
-        if (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[0][2] == player) {
+        if (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[0][2] == playerInput) {
             isWinner = WINNER_FLAG::WIN;
         }
         return static_cast<int>(isWinner);
     }
     int Minimax(int depth, bool isAI) {
-        if (AICheckWinner('X') == 1) {
+        if (CheckWinner('X') == 1) {
             return 1;
         }
-        if (AICheckWinner('O') == 1) {
+        if (CheckWinner('O') == 1) {
             return -1;
         }
         if (depth < 0) {
@@ -182,12 +157,14 @@ public:
         std::cout << "First player is O" << std::endl;
         playerOne.SetPlayerInput('O');
         playerTwo.SetPlayerInput('X');
+        int checkValue;
 
         int input;
         while(!winner){
             std::cout << "Please pick where to put your input 0-8: ";
             if (currentPlayer) {
                 board.Bestmove(playerTurns);
+                checkValue = board.CheckWinner('X');
             }
             else{
                 while (!(std::cin >> input) && input >= 0 && input <= 8) {
@@ -197,9 +174,9 @@ public:
                     std::cout << "Invalid input. Please enter an integer: ";
                 }
                 board.Input(input, playerOne.GetPlayerInput());
+                checkValue = board.CheckWinner('O');
             }
             playerTurns--;
-            int checkValue = board.CheckWinner();
             system("CLS");
             board.DrawBoard();
             
@@ -217,9 +194,6 @@ public:
         }
     }
 };
-
-
-
 
 int main()
 {
