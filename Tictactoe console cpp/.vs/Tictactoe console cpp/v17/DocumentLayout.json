@@ -14,11 +14,15 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
             },
             {
               "$type": "Document",
@@ -28,7 +32,7 @@
               "RelativeDocumentMoniker": "Tictactoe console cpp\\Tictactoe console cpp.cpp",
               "ToolTip": "C:\\Users\\cedie\\source\\repos\\Tictactoe-cpp\\Tictactoe console cpp\\Tictactoe console cpp\\Tictactoe console cpp.cpp",
               "RelativeToolTip": "Tictactoe console cpp\\Tictactoe console cpp.cpp",
-              "ViewState": "AQIAAIQAAAAAAAAAAADwv5IAAAAFAAAA",
+              "ViewState": "AQIAAGoAAAAAAAAAAAAvwJ4AAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-05-09T03:31:27.904Z",
               "EditorCaption": ""
